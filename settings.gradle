@@ -1,0 +1,3 @@
+include ':scrapp'
+include ':app'
+rootProject.name = "scrapp"
