@@ -1,50 +1,47 @@
 package com.oinotna.scrapp.core;
 
+import java.util.Optional;
+
+import static java.util.Optional.of;
+
 public class FindableNode {
-    private String _class=null;
+    private String className=null;
     private String text=null;
     private String desc=null;
     private String id=null;
-    private String pkg="com.instagram.android";
+    private String pkg=null;
     //private static String PKGID = "com.instagram.android";
-    public FindableNode(){
 
-    }
-    public com.example.acessinstabot.FindableNode setClassName(String _class){
-        this._class=_class;
+    public FindableNode setClassName(String className){
+        this.className=className;
         return this;
     }
-    public com.example.acessinstabot.FindableNode setId(String id){
+    public FindableNode setId(String id){
         this.id=id;
-
         return this;
     }
-    public com.example.acessinstabot.FindableNode setPkg(String pkg){
+    public FindableNode setPkg(String pkg){
         this.pkg=pkg;
         return this;
     }
-    public com.example.acessinstabot.FindableNode setText(String text){
+    public FindableNode setText(String text){
         this.text=text;
         return this;
     }
-    public com.example.acessinstabot.FindableNode setDesc(String desc){
+    public FindableNode setDesc(String desc){
         this.desc=desc;
         return this;
     }
     public String getClassName(){
-
-        return this._class;
+        return this.className;
     }
-    public  String getId(){
-
+    public String getId(){
         return this.id;
     }
     public  String getText(){
-
         return this.text;
     }
     public  String getDesc(){
-
         return this.desc;
     }
     public String getPkg(){

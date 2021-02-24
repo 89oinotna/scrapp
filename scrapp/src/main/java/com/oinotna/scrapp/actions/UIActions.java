@@ -58,9 +58,9 @@ public class UIActions {
     }
     public static void scrollDownMedium()
     {
-        com.example.acessinstabot.uiactions.wait(1000);
+        UIActions.wait(1000);
         Swipe(500,1300,500,200,20);
-        com.example.acessinstabot.uiactions.wait(1000);
+        UIActions.wait(1000);
     }
     public static void scrollUp()
     {
@@ -95,6 +95,7 @@ public class UIActions {
 
         }
     }
+
     public static List<AccessibilityNodeInfo> waitObjects(Method method, String message) throws Exception {
         Object[] parameters = new Object[1];
         parameters[0] = message;

@@ -12,7 +12,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.oinotna.scrapp.actions.UIActions;
-import com.oinotna.scrapp.core.MyObject;
+import com.oinotna.scrapp.core.Node;
 import com.oinotna.scrapp.service.MyAccessibilityService;
 
 import java.util.List;
@@ -69,12 +69,12 @@ public class MainActivity extends AppCompatActivity {
     public void trovaInfo()
     {
 
-        com.example.acessinstabot.FindableNode node = new com.example.acessinstabot.FindableNode().setClassName("android.view.ViewGroup");
+        FindableNode node = new FindableNode().setClassName("android.view.ViewGroup");
         List<AccessibilityNodeInfo> o = null;
         boolean trovato = false;
         while (!trovato)
         {
-            o = MyObject.waitForNode(node,1000);
+            o = Node.waitForNode(node,1000);
             try {
                 if(!trovato)
                 {
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 //String id = getHTML("http://192.168.178.27:4567/idf");
                 ExecutorService pool = Executors.newFixedThreadPool(2);
                 String id="";
-                com.example.acessinstabot.getHttpTask task = new com.example.acessinstabot.getHttpTask("http://192.168.178.27:4567/idf");
+                getHttpTask task = new getHttpTask("http://192.168.178.27:4567/idf");
                 Future<String> res = pool.submit(task);
                 id = res.get(1000L, TimeUnit.MILLISECONDS);
                 Thread.sleep(100);
@@ -138,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
     }
     public void cliccaIndietro()
     {
-        com.example.acessinstabot.FindableNode node = new com.example.acessinstabot.FindableNode().setClassName("android.widget.ImageView");
-        List<AccessibilityNodeInfo> o = MyObject.waitForNode(node,1000);
+        FindableNode node = new FindableNode().setClassName("android.widget.ImageView");
+        List<AccessibilityNodeInfo> o = Node.waitForNode(node,1000);
         try {
             if(o!=null)
             {

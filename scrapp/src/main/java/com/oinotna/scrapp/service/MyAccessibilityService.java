@@ -21,7 +21,7 @@ public class MyAccessibilityService extends AccessibilityService {
         super.onCreate();
         Instance=this;
         Log.d("MyAccessibilityService", "onCreate");
-        root=getRootInActiveWindow();
+        refreshRoot();
         //PackageManager pm = getPackageManager();
         /*Intent intent = pm.getLaunchIntentForPackage("com.instagram.android");
         startActivity(intent);*/
@@ -39,7 +39,7 @@ public class MyAccessibilityService extends AccessibilityService {
            return;
         }
         if (event.getEventType() == TYPES_ALL_MASK) {
-            root = getRootInActiveWindow();
+            refreshRoot();
         }
 
         event.getEventType();
@@ -57,9 +57,12 @@ public class MyAccessibilityService extends AccessibilityService {
     }
 
 
-    public AccessibilityNodeInfo getRoot(){
+    public static AccessibilityNodeInfo getRoot(){
+        return root;
+    }
 
-        return root =  getRootInActiveWindow();
+    private void refreshRoot(){
+         root =  getRootInActiveWindow();
     }
 
 

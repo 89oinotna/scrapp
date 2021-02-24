@@ -3,27 +3,30 @@ package com.oinotna.scrapp.core;
 import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.oinotna.scrapp.service.MyAccessibilityService;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
-public class MyObject {
+public class Node {
     private AccessibilityNodeInfo root;
-    private List<AccessibilityNodeInfo> lst;
-    private static String PKGID = "com.instagram.android";
+    private List<Node> lst;
+    //private static String PKGID = "com.instagram.android";
 
-    public MyObject(AccessibilityNodeInfo _node){
-        root=_node;
+    public Node(AccessibilityNodeInfo node){
+        root=node;
         lst=new ArrayList<>();
 
     }
-    public MyObject(){
-        root= com.example.acessinstabot.MyAccessibilityService.getRoot();
+    public Node(){
+        root= MyAccessibilityService.getRoot();
         lst=new ArrayList<>();
-
     }
 
-
-    public com.example.acessinstabot.MyObject byId(String id){
+    /*
+    public Node byId(String id){
         //TODO: fix
         if(id==null) return this;
         for (int i=0; i<lst.size(); i++){
@@ -35,7 +38,7 @@ public class MyObject {
         }
         return this;
     }
-    public com.example.acessinstabot.MyObject byId(String id, String pkg){
+    public Node byId(String id, String pkg){
         //TODO: fix
         if(id==null) return this;
         for (int i=0; i<lst.size(); i++){
@@ -45,7 +48,7 @@ public class MyObject {
         }
         return this;
     }
-    public com.example.acessinstabot.MyObject byText(String text){
+    public Node byText(String text){
         if(text==null) return this;
         for (int i=0; i<lst.size(); i++){
             if(lst.get(i).getText()!=null) {
@@ -56,7 +59,7 @@ public class MyObject {
         }
         return this;
     }
-    public com.example.acessinstabot.MyObject byDesc(String desc){
+    public Node byDesc(String desc){
         if(desc==null) return this;
         for (int i=0; i<lst.size(); i++){
             if(!lst.get(i).getContentDescription().toString().contains(desc)){
@@ -65,7 +68,7 @@ public class MyObject {
         }
         return this;
     }
-    public com.example.acessinstabot.MyObject byClass(String _class){
+    public Node byClass(String _class){
         if(_class==null) return this;
         for (int i=0; i<lst.size(); i++){
             if(!lst.get(i).getClassName().equals(_class)) {
@@ -78,30 +81,61 @@ public class MyObject {
         if(lst.size()>i)
             return lst.get(i);
         return null;
-    }
-    public com.example.acessinstabot.MyObject findByClass(String _class){
+    }*/
+
+    public List<Node> find(FindableNode fn){
         lst.clear();
+        for(int i=0; i<root.getChildCount(); i++){
+            if(root.getChild(i)!=null) {
+                Node child=new Node(root.getChild(i));
+                if (child.equality(fn)) {
+                    lst.add(child);
+                }
+                lst.addAll(child.find(fn));
+            }
+        }
+
+        return lst;
+    }
+
+    private boolean equality(FindableNode fn){
+        if(fn.getClassName()!=null && !fn.getClassName().contentEquals(root.getClassName())){
+             return false;
+        }
+        if( fn.getText()!=null && !fn.getText().contentEquals(root.getText())){ return false;}
+        if(fn.getId()!=null && !fn.getId().equals(root.getViewIdResourceName())){return false;}
+        if( fn.getPkg()!=null && !fn.getPkg().contentEquals(root.getPackageName())){return false;}
+        if(fn.getDesc()!=null && !fn.getDesc().contentEquals(root.getContentDescription())){return false;}
+        return true;
+        //root.getContentDescription().toString().contains();
+        //root.findAccessibilityNodeInfosByViewId(pkg+":id/"+id);
+    }
+    
+    public Node findByClassName(String className){
+        ////lst.clear();
+        Stream<String> s;
+       // s.
        // AccessibilityNodeInfo root =MyAccessibilityService.getRoot();
         for(int i=0; i<root.getChildCount(); i++){
-            com.example.acessinstabot.MyObject c=new com.example.acessinstabot.MyObject(root.getChild(i));
-            c.findByClass(_class);
-            List<AccessibilityNodeInfo> l=c.getList();
-            lst.addAll(l);
             if(root.getChild(i)!=null) {
                 if (root.getChild(i).getClassName() != null) {
-                    if (root.getChild(i).getClassName().equals(_class)) {
+                    if (root.getChild(i).getClassName().equals(className)) {
                         lst.add(root.getChild(i));
                     }
                 }
             }
+            Node child=new Node(root.getChild(i));
+            child.findByClassName(className);
+            List<AccessibilityNodeInfo> l=child.getList();
+            lst.addAll(l);
         }
         return this;
     }
-    public com.example.acessinstabot.MyObject findByText(String text){
-        lst.clear();
+    public Node findByText(String text){
+        //lst.clear();
         for(int i=0; i<root.getChildCount(); i++){
-            com.example.acessinstabot.MyObject c=new com.example.acessinstabot.MyObject(root.getChild(i));
-            c.findByClass(text);
+            Node c=new Node(root.getChild(i));
+            c.findByClassName(text);
             List<AccessibilityNodeInfo> l=c.getList();
             lst.addAll(l);
             if(root.getChild(i)!=null) {
@@ -115,31 +149,33 @@ public class MyObject {
         return this;
     }
 
-    public com.example.acessinstabot.MyObject findById(String id, String pkg){
-        lst.clear();
+    public Node findById(String id, String pkg){
+        //lst.clear();
 
         if(root!=null){
-        lst=root.findAccessibilityNodeInfosByViewId(pkg+":id/"+id);}
+         lst=root.findAccessibilityNodeInfosByViewId(pkg+":id/"+id);
+        }
 
         return this;
     }
 
-    public com.example.acessinstabot.MyObject findById(String id){
-        lst.clear();
+    public Node findById(String id){
+        //lst.clear();
 
         lst=root.findAccessibilityNodeInfosByViewId(PKGID+":id/"+id);
 
         return this;
     }
 
-    public com.example.acessinstabot.MyObject findByDesc(String desc){
-        lst.clear();
+    public Node findByDesc(String desc){
+        //lst.clear();
 
         for(int i=0; i<root.getChildCount(); i++){
-            com.example.acessinstabot.MyObject c=new com.example.acessinstabot.MyObject(root.getChild(i));
+            Node c=new Node(root.getChild(i));
             c.findByDesc(desc);
             List<AccessibilityNodeInfo> l=c.getList();
             lst.addAll(l);
+
             if(root.getChild(i)!=null) {
                 if (root.getChild(i).getContentDescription() != null) {
                     Log.v("ciao",root.getChild(i).getContentDescription().toString());
@@ -156,8 +192,8 @@ public class MyObject {
         return lst;
     }
 
-    public static boolean waitForNode(AccessibilityNodeInfo _root, com.example.acessinstabot.FindableNode n, int timeout){
-        com.example.acessinstabot.MyObject o=new com.example.acessinstabot.MyObject(_root);
+    public static boolean waitForNode(AccessibilityNodeInfo _root, FindableNode n, int timeout){
+        Node o=new Node(_root);
         Long start = System.currentTimeMillis();
         Long last=System.currentTimeMillis();
         if(n.getPkg()!=null){
@@ -171,7 +207,7 @@ public class MyObject {
             }
             else if(n.getClassName()!=null){
 
-                o.findByClass(n.getClassName()).byText(n.getText()).byDesc(n.getDesc()).byId(n.getId(), n.getPkg());
+                o.findByClassName(n.getClassName()).byText(n.getText()).byDesc(n.getDesc()).byId(n.getId(), n.getPkg());
             }
 
             else if(n.getText()!=null){
@@ -192,8 +228,8 @@ public class MyObject {
         }
         return true;
     }
-    public static List<AccessibilityNodeInfo> waitForNode(com.example.acessinstabot.FindableNode n, int timeout){
-        com.example.acessinstabot.MyObject o=new com.example.acessinstabot.MyObject(com.example.acessinstabot.MyAccessibilityService.getRoot());
+    public static List<AccessibilityNodeInfo> waitForNode(FindableNode n, int timeout){
+        Node o=new Node(MyAccessibilityService.getRoot());
         Long start = System.currentTimeMillis();
         Long last=System.currentTimeMillis();
 
@@ -205,7 +241,7 @@ public class MyObject {
             }
             else if(n.getClassName()!=null){
 
-                o.findByClass(n.getClassName()).byText(n.getText()).byDesc(n.getDesc()).byId(n.getId(), n.getPkg());
+                o.findByClassName(n.getClassName()).byText(n.getText()).byDesc(n.getDesc()).byId(n.getId(), n.getPkg());
             }
 
             else if(n.getText()!=null){
@@ -226,13 +262,13 @@ public class MyObject {
         }
         return o.getList();
     }
-    public static List<AccessibilityNodeInfo> waitForNode(com.example.acessinstabot.FindableNode n){
-        com.example.acessinstabot.MyObject o=new com.example.acessinstabot.MyObject(com.example.acessinstabot.MyAccessibilityService.getRoot());
+    public static List<AccessibilityNodeInfo> waitForNode(FindableNode n){
+        Node o=new Node(MyAccessibilityService.getRoot());
         Long start = System.currentTimeMillis();
         Long last=System.currentTimeMillis();
 
         while(o.getList().isEmpty()){
-            o=new com.example.acessinstabot.MyObject(com.example.acessinstabot.MyAccessibilityService.getRoot());
+            o=new Node(MyAccessibilityService.getRoot());
             if(n.getId()!=null){
 
                 o.findById(n.getId(), n.getPkg()).byText(n.getText()).byDesc(n.getDesc()).byClass(n.getClassName());
@@ -240,7 +276,7 @@ public class MyObject {
             }
             else if(n.getClassName()!=null){
 
-                o.findByClass(n.getClassName()).byText(n.getText()).byDesc(n.getDesc()).byId(n.getId(), n.getPkg());
+                o.findByClassName(n.getClassName()).byText(n.getText()).byDesc(n.getDesc()).byId(n.getId(), n.getPkg());
             }
 
             else if(n.getText()!=null){
@@ -274,7 +310,7 @@ public class MyObject {
         for (int i=0; i<n.getChildCount(); i++){
             if(n.getChild(i)!=null) {
                 lst.add(n.getChild(i));
-                lst.addAll(com.example.acessinstabot.MyObject.getAllChildren(n.getChild(i)));
+                lst.addAll(Node.getAllChildren(n.getChild(i)));
             }
 
         }
