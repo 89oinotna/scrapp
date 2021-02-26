@@ -22,81 +22,35 @@ public class MyAccessibilityService extends AccessibilityService {
         Instance=this;
         Log.d("MyAccessibilityService", "onCreate");
         refreshRoot();
-        //PackageManager pm = getPackageManager();
-        /*Intent intent = pm.getLaunchIntentForPackage("com.instagram.android");
+        //Launch application by package name
+        /*PackageManager pm = getPackageManager();
+        Intent intent = pm.getLaunchIntentForPackage("com.instagram.android");
         startActivity(intent);*/
-    }
-
-    public Object getClipboardService(){
-        return getSystemService(Context.CLIPBOARD_SERVICE);
     }
 
     @Override
     public void onAccessibilityEvent(final AccessibilityEvent event){
-        //
-        //if(!com.example.acessinstabot.MainActivity.run) return;
         if(!running){
            return;
         }
-        /*if (event.getEventType() == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
-            Log.d("Notification","Recieved event");
-            Parcelable data = event.getParcelableData();
-            if (data instanceof Notification) {
-                Log.d("Notification","Recieved notification");
-                Notification notification = (Notification) data;
-                Log.d("Notification","ticker: " + notification.tickerText);
-                Log.d("Notification","icon: " + notification.icon);
-                Log.d("Notification", "notification: "+ event.getText());
-                Log.d("Notification", "text: "+ notification.extras.getCharSequence(Notification.EXTRA_TEXT).toString());
-            }
-        }else if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            Log.d("TEST", "HELLO");
-
-        }else if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED) {
-            Log.d("Text: ", "-> "+event.getText().toString());
-        }*/
         if (event.getEventType() == TYPES_ALL_MASK) {
             refreshRoot();
         }
-
-        event.getEventType();
-        Log.v("ciao", "***** onAccessibilityEvent");
-        Toast.makeText(getApplicationContext(), "Got event from: " + event.getPackageName(), Toast.LENGTH_LONG).show();
-        //root=getRootInActiveWindow();
-        Toast.makeText(getApplicationContext(), root.getClassName(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onInterrupt() {
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            disableSelf();
-        }*/
         running=false;
-    }
-
-
-    public static AccessibilityNodeInfo getRoot(){
-        return root;
     }
 
     private void refreshRoot(){
          root =  getRootInActiveWindow();
     }
 
-
-
     @Override
     protected void onServiceConnected() {
         running = true;
-        System.out.println("onServiceConnected");
-        /*AccessibilityServiceInfo info = getServiceInfo();
-        //info.eventTypes = AccessibilityEvent.TYPE_WINDOWS_CHANGED;
-        info.eventTypes=AccessibilityEvent.TYPES_ALL_MASK;
-        info.feedbackType = AccessibilityServiceInfo.FEEDBACK_ALL_MASK;
-        info.flags = AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
-        info.notificationTimeout = 100;
-        info.packageNames = null;//new String[]{"com.facebook.katana"};
-        setServiceInfo(info);*/
+        System.out.println("Service started...");
         super.onServiceConnected();
     }
 
