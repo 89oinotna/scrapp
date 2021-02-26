@@ -15,15 +15,17 @@ public class Node {
     private List<Node> lst;
     //private static String PKGID = "com.instagram.android";
 
+    public AccessibilityNodeInfo getRoot(){return root;}
+
     public Node(AccessibilityNodeInfo node){
         root=node;
         lst=new ArrayList<>();
 
     }
-    public Node(){
+    /*public Node(){
         root= MyAccessibilityService.getRoot();
         lst=new ArrayList<>();
-    }
+    }*/
 
     /*
     public Node byId(String id){
@@ -88,7 +90,7 @@ public class Node {
         for(int i=0; i<root.getChildCount(); i++){
             if(root.getChild(i)!=null) {
                 Node child=new Node(root.getChild(i));
-                if (child.equality(fn)) {
+                if (fn.equality(child)) {
                     lst.add(child);
                 }
                 lst.addAll(child.find(fn));
@@ -98,19 +100,8 @@ public class Node {
         return lst;
     }
 
-    private boolean equality(FindableNode fn){
-        if(fn.getClassName()!=null && !fn.getClassName().contentEquals(root.getClassName())){
-             return false;
-        }
-        if( fn.getText()!=null && !fn.getText().contentEquals(root.getText())){ return false;}
-        if(fn.getId()!=null && !fn.getId().equals(root.getViewIdResourceName())){return false;}
-        if( fn.getPkg()!=null && !fn.getPkg().contentEquals(root.getPackageName())){return false;}
-        if(fn.getDesc()!=null && !fn.getDesc().contentEquals(root.getContentDescription())){return false;}
-        return true;
-        //root.getContentDescription().toString().contains();
-        //root.findAccessibilityNodeInfosByViewId(pkg+":id/"+id);
-    }
-    
+
+  /*
     public Node findByClassName(String className){
         ////lst.clear();
         Stream<String> s;
@@ -191,9 +182,25 @@ public class Node {
 
         return lst;
     }
+*/  public boolean waitForNode(FindableNode fn, long timeout){
+        return !waitAndReturnNode(fn,timeout).isEmpty();
+    }
+    public List<Node> waitAndReturnNode(FindableNode fn, long timeout){
+        long start = System.currentTimeMillis();
+        long last=System.currentTimeMillis();
+        List<Node> lst;
+        while((lst=find(fn)).isEmpty() && (last-start)<timeout){
 
-    public static boolean waitForNode(AccessibilityNodeInfo _root, FindableNode n, int timeout){
-        Node o=new Node(_root);
+            last=System.currentTimeMillis();
+
+        }
+
+        return lst;
+
+    }
+    /*
+    public static boolean waitForNode(AccessibilityNodeInfo root, FindableNode n, long timeout){
+        Node o=new Node(root);
         Long start = System.currentTimeMillis();
         Long last=System.currentTimeMillis();
         if(n.getPkg()!=null){
@@ -228,7 +235,7 @@ public class Node {
         }
         return true;
     }
-    public static List<AccessibilityNodeInfo> waitForNode(FindableNode n, int timeout){
+    public static List<AccessibilityNodeInfo> waitForNode(FindableNode n, long timeout){
         Node o=new Node(MyAccessibilityService.getRoot());
         Long start = System.currentTimeMillis();
         Long last=System.currentTimeMillis();
@@ -296,7 +303,7 @@ public class Node {
             return null;
         }
         return o.getList();
-    }
+    }*/
 
     public static List<AccessibilityNodeInfo> getChildren(AccessibilityNodeInfo n){
         List<AccessibilityNodeInfo> lst=new ArrayList<>();

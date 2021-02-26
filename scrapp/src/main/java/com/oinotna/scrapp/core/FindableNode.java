@@ -1,5 +1,7 @@
 package com.oinotna.scrapp.core;
 
+import android.view.accessibility.AccessibilityNodeInfo;
+
 import java.util.Optional;
 
 import static java.util.Optional.of;
@@ -46,6 +48,21 @@ public class FindableNode {
     }
     public String getPkg(){
         return this.pkg;
+    }
+
+
+    public boolean equality(Node n){
+        AccessibilityNodeInfo ani=n.getRoot();
+        if(className!=null && !className.contentEquals(ani.getClassName())){
+            return false;
+        }
+        if( text!=null && !text.contentEquals(ani.getText())){ return false;}
+        if(id!=null && !id.equals(ani.getViewIdResourceName())){return false;}
+        if(pkg!=null && !pkg.contentEquals(ani.getPackageName())){return false;}
+        if(desc!=null && !desc.contentEquals(ani.getContentDescription())){return false;}
+        return true;
+        //root.getContentDescription().toString().contains();
+        //root.findAccessibilityNodeInfosByViewId(pkg+":id/"+id);
     }
 
 }

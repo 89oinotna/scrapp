@@ -38,6 +38,23 @@ public class MyAccessibilityService extends AccessibilityService {
         if(!running){
            return;
         }
+        /*if (event.getEventType() == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
+            Log.d("Notification","Recieved event");
+            Parcelable data = event.getParcelableData();
+            if (data instanceof Notification) {
+                Log.d("Notification","Recieved notification");
+                Notification notification = (Notification) data;
+                Log.d("Notification","ticker: " + notification.tickerText);
+                Log.d("Notification","icon: " + notification.icon);
+                Log.d("Notification", "notification: "+ event.getText());
+                Log.d("Notification", "text: "+ notification.extras.getCharSequence(Notification.EXTRA_TEXT).toString());
+            }
+        }else if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            Log.d("TEST", "HELLO");
+
+        }else if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED) {
+            Log.d("Text: ", "-> "+event.getText().toString());
+        }*/
         if (event.getEventType() == TYPES_ALL_MASK) {
             refreshRoot();
         }
@@ -54,6 +71,7 @@ public class MyAccessibilityService extends AccessibilityService {
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             disableSelf();
         }*/
+        running=false;
     }
 
 
@@ -71,14 +89,14 @@ public class MyAccessibilityService extends AccessibilityService {
     protected void onServiceConnected() {
         running = true;
         System.out.println("onServiceConnected");
-        AccessibilityServiceInfo info = getServiceInfo();
+        /*AccessibilityServiceInfo info = getServiceInfo();
         //info.eventTypes = AccessibilityEvent.TYPE_WINDOWS_CHANGED;
         info.eventTypes=AccessibilityEvent.TYPES_ALL_MASK;
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_ALL_MASK;
         info.flags = AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
         info.notificationTimeout = 100;
         info.packageNames = null;//new String[]{"com.facebook.katana"};
-        setServiceInfo(info);
+        setServiceInfo(info);*/
         super.onServiceConnected();
     }
 

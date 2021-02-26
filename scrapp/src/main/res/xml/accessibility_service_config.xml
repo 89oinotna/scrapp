@@ -9,7 +9,9 @@
     android:canRequestTouchExplorationMode="true"
     android:canPerformGestures="true"
     android:notificationTimeout="100"
-    android:packageNames="com.instagram.android"
+
 />
-    <!--android:description="@string/app_name" -->
+    <!--
+    android:packageNames="com.instagram.android"
+    android:description="@string/app_name" -->
 
