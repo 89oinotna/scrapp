@@ -6,13 +6,15 @@ import java.util.Optional;
 
 import static java.util.Optional.of;
 
+/**
+ * Object that rappresent a Node that can be initialized to be search inside the view.
+ */
 public class FindableNode {
     private String className=null;
     private String text=null;
     private String desc=null;
     private String id=null;
     private String pkg=null;
-    //private static String PKGID = "com.instagram.android";
 
     public FindableNode setClassName(String className){
         this.className=className;
@@ -51,6 +53,11 @@ public class FindableNode {
     }
 
 
+    /**
+     * Compare if the Node has the same attributes of the FindableNode
+     * @param n Require the node to be compared
+     * @return true if the Node is equals, false otherwise
+     */
     public boolean equality(Node n){
         AccessibilityNodeInfo ani=n.getRoot();
         if(className!=null && !className.contentEquals(ani.getClassName())){
@@ -61,8 +68,6 @@ public class FindableNode {
         if(pkg!=null && !pkg.contentEquals(ani.getPackageName())){return false;}
         if(desc!=null && !desc.contentEquals(ani.getContentDescription())){return false;}
         return true;
-        //root.getContentDescription().toString().contains();
-        //root.findAccessibilityNodeInfosByViewId(pkg+":id/"+id);
     }
 
 }
