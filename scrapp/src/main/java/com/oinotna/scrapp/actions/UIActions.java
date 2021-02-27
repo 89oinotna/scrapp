@@ -69,25 +69,37 @@ public class UIActions {
 
     public static void openNotification(Node node){
         //node.getRoot().performAction(AccessibilityNodeInfo.)
+        MyAccessibilityService.Instance.performGlobalAction(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS);
     }
 
-    public static void openQuickSettings(){}
+    public static void openQuickSettings(){
+        MyAccessibilityService.Instance.performGlobalAction(AccessibilityService.GLOBAL_ACTION_QUICK_SETTINGS);
+    }
 
-    public static void pressBack(){}
+    public static void pressBack(){
+        MyAccessibilityService.Instance.performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
+    }
 
-    public static void pressHome(){}
+    public static void pressHome(){
+        MyAccessibilityService.Instance.performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME);
+    }
 
     public static void pressKeycode(){}
 
-    public static void pressMenu(){}
+    public static void pressMenu(){
 
-    public static void pressRecentApps(){}
+    }
+
+    public static void pressRecentApps(){
+        MyAccessibilityService.Instance.performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS);
+    }
 
     public static void pressSearch(){}
 
     public static void sleep(){}
 
-    public static void takeScreenshot(){}
+    public static void takeScreenshot(){
+    }
     /*
     public static void scrollDown()
     {
